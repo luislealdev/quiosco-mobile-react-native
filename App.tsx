@@ -1,9 +1,9 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, FlatList, ActivityIndicator, Button } from 'react-native';
+import { StyleSheet, Text, View, FlatList, ActivityIndicator, Button, SafeAreaView } from 'react-native';
 import { CartProvider, useCart } from './components/context/CartContext';
 import Cart from './components/cart/Cart';
-import { Product } from './interfaces/Product.interface';
+import { Product } from './interfaces/product.interface';
 
 const ProductList = () => {
   const [products, setProducts] = useState<Product[]>([]); // Usa la interfaz Product aquí
@@ -44,6 +44,8 @@ const ProductList = () => {
   return (
     <View style={styles.container}>
       <FlatList
+        columnWrapperStyle={{ justifyContent: 'space-between' }}
+        numColumns={2}
         data={products}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
@@ -59,7 +61,7 @@ const ProductList = () => {
           </View>
         )}
       />
-      <Cart /> 
+      <Cart />
       <StatusBar style="auto" />
     </View>
   );
@@ -68,13 +70,19 @@ const ProductList = () => {
 export default function App() {
   return (
     <CartProvider>
-      <ProductList />
+      <SafeAreaView style={styles.safeArea}>
+        <ProductList />
+      </SafeAreaView>
     </CartProvider>
   );
 }
 
 // Estilos para la aplicación
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#fff', // Asegura que el fondo sea blanco
+  },
   container: {
     flex: 1,
     backgroundColor: '#fff',
@@ -82,12 +90,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   productCard: {
+    width: '40%',
     backgroundColor: '#f9f9f9',
     padding: 20,
     marginVertical: 8,
-    marginHorizontal: 16,
+    marginHorizontal: 20,
     borderRadius: 8,
-    width: '90%',
   },
   productName: {
     fontSize: 18,
